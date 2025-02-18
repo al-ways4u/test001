@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrow Movement Box</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="500" height="500"></canvas>
+
+<script>
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let boxX = 50;
+    let boxY = 50;
+    const boxSize = 50;
+    const boxSpeed = 5;
+
+    // Draw the box on the canvas
+    function drawBox() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        ctx.fillStyle = "#3498db"; // Set the box color
+        ctx.fillRect(boxX, boxY, boxSize, boxSize); // Draw the box
+    }
+
+    // Handle key press events for arrow keys
+    function moveBox(e) {
+        switch(e.key) {
+            case "ArrowUp":
+                if (boxY > 0) boxY -= boxSpeed;
+                break;
+            case "ArrowDown":
+                if (boxY < canvas.height - boxSize) boxY += boxSpeed;
+                break;
+            case "ArrowLeft":
+                if (boxX > 0) boxX -= boxSpeed;
+                break;
+            case "ArrowRight":
+                if (boxX < canvas.width - boxSize) boxX += boxSpeed;
+                break;
+        }
+        drawBox(); // Redraw the box after moving
+    }
+
+    // Listen for arrow key presses
+    window.addEventListener("keydown", moveBox);
+
+    // Initial draw
+    drawBox();
+</script>
+
+</body>
+</html>
