@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arrow Movement Box</title>
+    <title>Smooth Arrow Movement Box</title>
     <style>
         body {
             margin: 0;
@@ -29,7 +29,9 @@
     let boxX = 50;
     let boxY = 50;
     const boxSize = 50;
-    const boxSpeed = 5;
+    const boxSpeed = 2; // Reduced speed for smoother movement
+    let dx = 0;
+    let dy = 0;
 
     // Draw the box on the canvas
     function drawBox() {
@@ -42,27 +44,50 @@
     function moveBox(e) {
         switch(e.key) {
             case "ArrowUp":
-                if (boxY > 0) boxY -= boxSpeed;
+                dy = -boxSpeed;
                 break;
             case "ArrowDown":
-                if (boxY < canvas.height - boxSize) boxY += boxSpeed;
+                dy = boxSpeed;
                 break;
             case "ArrowLeft":
-                if (boxX > 0) boxX -= boxSpeed;
+                dx = -boxSpeed;
                 break;
             case "ArrowRight":
-                if (boxX < canvas.width - boxSize) boxX += boxSpeed;
+                dx = boxSpeed;
                 break;
         }
-        drawBox(); // Redraw the box after moving
     }
 
-    // Listen for arrow key presses
-    window.addEventListener("keydown", moveBox);
+    // Stop movement when key is released
+    function stopMovement(e) {
+        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+            dy = 0;
+        }
+        if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+            dx = 0;
+        }
+    }
 
-    // Initial draw
-    drawBox();
+    // Game loop to update position
+    function update() {
+        if (boxX + dx >= 0 && boxX + dx <= canvas.width - boxSize) {
+            boxX += dx;
+        }
+        if (boxY + dy >= 0 && boxY + dy <= canvas.height - boxSize) {
+            boxY += dy;
+        }
+        drawBox();
+        requestAnimationFrame(update); // Keep updating the position for smooth animation
+    }
+
+    // Listen for keydown and keyup events
+    window.addEventListener("keydown", moveBox);
+    window.addEventListener("keyup", stopMovement);
+
+    // Start the animation loop
+    update();
 </script>
 
 </body>
 </html>
+
